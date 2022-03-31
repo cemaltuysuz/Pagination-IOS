@@ -13,6 +13,6 @@ struct AlbumsResponse: Codable {
     let limit: Int
     let next: String
     let offset: Int
-    var previous: String? = nil
+    var previous: String?
     let total: Int
 }
