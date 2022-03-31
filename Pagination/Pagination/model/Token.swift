@@ -9,5 +9,5 @@ import Foundation
 
 
 struct Token {
-    static let getToken = "--Your Token --"
+    static let getToken = "Bearer -YOUR TOKEN-"
 }
