@@ -16,7 +16,7 @@ class MainVC: UIViewController {
     
     let pageLimit = 30
     var offset:Int?
-    let artistId = "0TnOYISbd1XYRBk9myaseg"
+    let artistId = "53XhwfbYqKCa1cC15pYq2q"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,15 +89,19 @@ extension MainVC  {
         if offset > 0 {
             url += "&offset=\(offset)"
         }
-        
+        print(url)
         Resource<AlbumsResponse>().fetchData(urlString: url, completion: { (result:Result<AlbumsResponse,Error>) in
             switch result {
             case .success(let success):
-                print("Başarılı ! gelen item sayısı : \(success.items.count)")
-                self.updateData(albums: success.items)
+                if success.items.count > 0 {
+                    self.updateData(albums: success.items)
+                }else {
+                    self.dismissLoadView()
+                }
+                
             case .failure(let failure):
                 self.dismissLoadView()
-                print(failure.localizedDescription)
+                print(failure)
             }
         })
     }
@@ -105,13 +109,12 @@ extension MainVC  {
     func updateData(albums:[Item]) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else {return}
-            if  albums.count > 0 {
-                if strongSelf.albums == nil {
-                    strongSelf.albums = [Item]()
-                }
-                strongSelf.albums! += albums
-                strongSelf.albumsTableView.reloadData()
+            
+            if strongSelf.albums == nil {
+                strongSelf.albums = [Item]()
             }
+            strongSelf.albums! += albums
+            strongSelf.albumsTableView.reloadData()
         }
     }
     
